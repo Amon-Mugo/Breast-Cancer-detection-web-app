@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Breast Cancer Prediction</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 30px;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      margin-top: 50px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+    }
+
+    button {
+      grid-column: span 2;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      background: #23d5ab;
+      color: #000;
+      font-weight: bold;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+
+    button:hover {
+      background: #23a6d5;
+      color: white;
+    }
+
+    .result {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 1.4em;
+    }
+
+    /* Loader styles */
+    .loader {
+      display: none;
+      margin: 20px auto;
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #23d5ab;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔬 Breast Cancer Prediction</h1>
+    <form id="predict-form">
+      <!-- Input fields created dynamically -->
+    </form>
+
+    <!-- Loader -->
+    <div class="loader" id="loader"></div>
+
+    <!-- Result -->
+    <div class="result" id="prediction-result"></div>
+  </div>
+
+  <script>
+    const featureNames = [
+      'texture_worst', 'area_se', 'area_worst', 'texture_mean', 'compactness_se',
+    'symmetry_worst', 'concavity_worst', 'concave points_worst', 'smoothness_worst', 
+    'smoothness_mean','symmetry_se','radius_worst','concavity_mean','area_mean','concave points_se'
+ 
+    ];
+
+    const form = document.getElementById('predict-form');
+    const resultDiv = 
+
+document.getElementById('prediction-result');
+    const loader = document.getElementById('loader');
+
+    // Create input fields dynamically
+    featureNames.forEach(name => {
+      const input = document.createElement('input');
+      input.type = 'number';
+      input.name = name;
+      input.placeholder = name.replace(/_/g, ' ');
+      input.required = true;
+      input.step='any';
+      input.inputMode='decimal';
+      form.appendChild(input);
+    });
+
+    // Submit button
+    const button = document.createElement('button');
+    button.type = 'submit';
+
+    button.textContent = 'Predict';
+    form.appendChild(button);
+
+    // Submit event
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      resultDiv.textContent = '';
+      loader.style.display = 'block';
+
+      const formData = new FormData(form);
+      const data = {};
+      for (const [key, value] of formData.entries()) {
+        data[key] = parseFloat(value);
+      }
+
+      try {
+        const response = await fetch('/prediction', {
+          method: 'POST',
+
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        resultDiv.textContent = `🧪 Prediction: ${result.result} (code: ${result.prediction})`;
+      } catch (error) {
+        resultDiv.textContent = '⚠️ Error occurred during prediction.';
+      } finally {
+        loader.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
