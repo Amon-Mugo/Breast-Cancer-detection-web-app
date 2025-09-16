@@ -9,7 +9,7 @@
 ---
 
 ## 📖 Overview
-Breast cancer is one of the most common cancers worldwide, and **early detection** is crucial for effective treatment.  
+Brest cancer is one of the most common cancers worldwide, and **early detection** is crucial for effective treatment.  
 This project is a **machine learning powered web application** that predicts whether a tumor is **Benign** or **Malignant** based on user-provided medical features.  
 
 The app provides a **simple and interactive interface** for healthcare professionals, students, and researchers to test predictions quickly.
