@@ -1,5 +1,5 @@
 
-# 🩺 Breast Cancer Detection Web App
+# 🩺 Brest Cancer Detection Web App
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![Flask](https://img.shields.io/badge/Flask-2.x-green)
